@@ -8,7 +8,7 @@
     <link href="/2023/06/16/TCPIP/"/>
     <url>/2023/06/16/TCPIP/</url>
     
-    <content type="html"><![CDATA[<p>​TCP&#x2F;IP协议族是一组不同的协 议组合在一起构成的协议族。尽管通常称该协议族为 TCP&#x2F;IP，但TCP和IP只是其中的两种协 议而已（该协议族的另一个名字是 I n t e r n e t协议族(Internet Protocol Suite)）。</p><p>​TCP（Transmission Control Protocol）传输控制协议</p><p>​UDP（User Datagram Protocol）用户数据报协议</p><span id="more"></span><p>​路由器的好处是为不同类型的物理网络提供连接：以太网、令牌环网、 点对点的链接和FDDI（光纤分布式数据接口）等等。 这些盒子也称作IP路由器（IP Router），但我们这里使用路由器( Router )这个术语。 从历史上说，这些盒子称作<strong>网关（gateway）</strong>，在很多TCP&#x2F;IP文献中都使用这个术语。</p><p> 现在网关这个术语只用来表示应用层<strong>网关</strong>：<strong>一个连接两种不同协议族的进程（例如， TCP&#x2F;IP和IBM的SNA），它为某个特定的应用程序服务（常常是电子邮件或文件传输）</strong>。</p><p>我们可以划分出端系统（ End system ）（两边的两台主机）和中间系统 （Intermediate system）（中间的路由器）。应用层和运输层使用端到端（ End - to - en d）协议。在 图中，只有端系统需要这两层协议。但是，网络层提供的却是逐跳（ Hop - by - hop）协议，两 个端系统和每个中间系统都要使用它。</p>]]></content>
+    <content type="html"><![CDATA[<p>​TCP&#x2F;IP协议族是一组不同的协 议组合在一起构成的协议族。尽管通常称该协议族为 TCP&#x2F;IP，但TCP和IP只是其中的两种协议而已（该协议族的另一个名字是 Internet协议族(Internet Protocol Suite)）。</p><p>​TCP（Transmission Control Protocol）传输控制协议</p><p>​UDP（User Datagram Protocol）用户数据报协议</p><span id="more"></span><p>​路由器的好处是为不同类型的物理网络提供连接：以太网、令牌环网、 点对点的链接和FDDI（光纤分布式数据接口）等等。 这些盒子也称作IP路由器（IP Router），但我们这里使用路由器( Router )这个术语。 从历史上说，这些盒子称作<strong>网关（gateway）</strong>，在很多TCP&#x2F;IP文献中都使用这个术语。</p><p> 现在网关这个术语只用来表示应用层<strong>网关</strong>：<strong>一个连接两种不同协议族的进程（例如， TCP&#x2F;IP和IBM的SNA），它为某个特定的应用程序服务（常常是电子邮件或文件传输）</strong>。</p><p>我们可以划分出端系统（ End system ）（两边的两台主机）和中间系统 （Intermediate system）（中间的路由器）。应用层和运输层使用端到端（ End - to - en d）协议。在 图中，只有端系统需要这两层协议。但是，网络层提供的却是逐跳（ Hop - by - hop）协议，两 个端系统和每个中间系统都要使用它。</p>]]></content>
     
     
     <categories>
