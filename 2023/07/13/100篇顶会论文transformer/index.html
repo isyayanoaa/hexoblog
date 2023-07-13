@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202307030854652.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Klay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1.Video swin transformer  代码：https:&#x2F;&#x2F;github.com&#x2F;SwinTransformer&#x2F;Video-Swin-Transformer  会议：CVPR 2022  2.A survey on vision transformer  期刊：IEEE transactions on pattern analysis and machine intelligenc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Myshop">
+<meta property="og:url" content="http://klayforever.cn/2023/07/13/100%E7%AF%87%E9%A1%B6%E4%BC%9A%E8%AE%BA%E6%96%87transformer/index.html">
+<meta property="og:site_name" content="Myshop">
+<meta property="og:description" content="1.Video swin transformer  代码：https:&#x2F;&#x2F;github.com&#x2F;SwinTransformer&#x2F;Video-Swin-Transformer  会议：CVPR 2022  2.A survey on vision transformer  期刊：IEEE transactions on pattern analysis and machine intelligenc">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-13T03:04:29.687Z">
+<meta property="article:modified_time" content="2023-07-13T07:01:07.327Z">
+<meta property="article:author" content="Klay">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Myshop</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"klayforever.cn","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>klay4ever</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>主页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Klay
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-13 11:04" pubdate>
+          2023年7月13日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          92 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：1 分钟前
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>1.Video swin transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/SwinTransformer/Video-Swin-Transformer">https://github.com/SwinTransformer/Video-Swin-Transformer</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>2.A survey on vision transformer</strong> </p>
+<p>期刊：IEEE transactions on pattern analysis and machine intelligence </p>
+<p><strong>3.Survey: Transformer based video-language pre-training</strong> </p>
+<p>期刊：AI Open </p>
+<p><strong>4.Cswin transformer: A general vision transformer backbone with cross-shaped windows</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/microsoft/CSWin-Transformer">https://github.com/microsoft/CSWin-Transformer</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>5.Swin transformer v2: Scaling up capacity and resolution</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/microsoft/Swin-Transformer">https://github.com/microsoft/Swin-Transformer</a> </p>
+<p>会议：CVPR 2022</p>
+<p><strong>6.Transformer quality in linear time</strong> </p>
+<p>会议：ICML 2022</p>
+<p><strong>7.Uformer: A general u-shaped transformer for image restoration</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/ZhendongWang6/Uformer">https://github.com/ZhendongWang6/Uformer</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>8.Transfg: A transformer architecture for fine-grained recognition</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/TACJu/TransFG">https://github.com/TACJu/TransFG</a> </p>
+<p>会议：AAAI 2022 </p>
+<p><strong>9.Restormer: Efficient transformer for high-resolution image restoration</strong></p>
+<p> 代码：<a target="_blank" rel="noopener" href="https://github.com/swz30/restormer">https://github.com/swz30/restormer</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>10.TubeFormer-DeepLab: Video Mask Transformer</strong> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>11.Mobile-former: Bridging mobilenet and transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/BR-IDL/PaddleViT">https://github.com/BR-IDL/PaddleViT</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>12.Transformer for single image super-resolution</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/luissen/esrt">https://github.com/luissen/esrt</a></p>
+<p>会议：CVPR 2022 </p>
+<p><strong>13.Anchor detr: Query design for transformer-based detector</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/megvii-research/AnchorDETR">https://github.com/megvii-research/AnchorDETR</a> </p>
+<p>会议：AAAI 2022 </p>
+<p><strong>14.Towards robust vision transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/vtddggg/Robust-Vision-Transformer">https://github.com/vtddggg/Robust-Vision-Transformer</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>15.Maskgit: Masked generative image transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/google-research/maskgit">https://github.com/google-research/maskgit</a></p>
+<p>会议：CVPR 2022 </p>
+<p><strong>16.Contextual transformer networks for visual recognition</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/yehli/imagenetmodel">https://github.com/yehli/imagenetmodel</a> </p>
+<p>期刊：IEEE Transactions on Pattern Analysis and Machine Intelligence </p>
+<p><strong>17.Vision transformer with deformable attention</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/leaplabthu/dat">https://github.com/leaplabthu/dat</a> </p>
+<p>会议：CVPR 2022 </p>
+<p><strong>18.SwinFusion: cross-domain long-range learning for general image fusion via swin transformer</strong></p>
+<p>期刊：IEEE&#x2F;CAA Journal of Automatica Sinica </p>
+<p><strong>19.1OW-DETR: Open-world detection transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/akshitac8/ow-detr">https://github.com/akshitac8/ow-detr</a></p>
+<p>会议：CVPR 2022 </p>
+<p><strong>20.PatchFormer: An Efficient Point Transformer With Patch Attention</strong></p>
+<p>会议：CVPR 2022</p>
+<p><strong>21.Pvt v2: Improved baselines with pyramid vision transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/whai362/PVT">https://github.com/whai362/PVT</a> </p>
+<p>期刊：Computational Visual Media </p>
+<p><strong>22.Uctransnet: rethinking the skip connections in u-net from a channel-wise perspective with tr ansformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/mcgregorwwww/uctransnet">https://github.com/mcgregorwwww/uctransnet</a></p>
+<p>会议：AAAI 2022 </p>
+<p><strong>23.Masked-attention mask transformer for universal image segmentation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/Mask2Former">https://github.com/facebookresearch/Mask2Former</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>24.P2T: Pyramid pooling transformer for scene understanding</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/yuhuan-wu/P2T">https://github.com/yuhuan-wu/P2T</a></p>
+<p>期刊：IEEE Transactions on Pattern Analysis and Machine Intelligence </p>
+<p><strong>25.Prompting decision transformer for few-shot policy generalization</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://mxu34.github.io/PromptDT/">https://mxu34.github.io/PromptDT/</a></p>
+<p>会议：ICML 2022 </p>
+<p><strong>26.Nested hierarchical transformer: Towards accurate, data-efficient and interpretable visual u nderstanding</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/google-research/nested-transformer">https://github.com/google-research/nested-transformer</a></p>
+<p>会议：AAAI 2022 </p>
+<p><strong>27.Pale transformer: A general vision transformer backbone with pale-shaped attention</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/BR-IDL/PaddleViT">https://github.com/BR-IDL/PaddleViT</a></p>
+<p>会议：AAAI 2022 </p>
+<p><strong>28.Transmorph: Transformer for unsupervised medical image registration</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/junyuchen245/TransMorph_Transformer_for_Medical_Image_Registration">https://github.com/junyuchen245/TransMorph_Transformer_for_Medical_Image_Registration</a></p>
+<p>期刊：Medical Image Analysis </p>
+<p><strong>29.Transformer-based Multimodal Information Fusion for Facial Expression Analysis</strong></p>
+<p>会议：CVPR 2022 </p>
+<p><strong>30.Structure-aware transformer for graph representation learning</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/borgwardtlab/sat">https://github.com/borgwardtlab/sat</a> </p>
+<p>会议：ICML 2022 </p>
+<p><strong>31.Mst++: Multi-stage spectral-wise transformer for efficient spectral reconstruction</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/caiyuanhao1998/MST-plus-plus">https://github.com/caiyuanhao1998/MST-plus-plus</a> </p>
+<p>会议：CVPR 2022</p>
+<p><strong>32.Cat: Cross attention in vision transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/linhezheng19/CAT">https://github.com/linhezheng19/CAT</a> </p>
+<p>会议：ICME 2022 </p>
+<p><strong>33.Ssast: Self-supervised audio spectrogram transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/YuanGongND/ssast">https://github.com/YuanGongND/ssast</a></p>
+<p>会议：AAAI 2022 </p>
+<p><strong>34.Ds-transunet: Dual swin transformer u-net for medical image segmentation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/TianBaoGe/DS-TransUNet">https://github.com/TianBaoGe/DS-TransUNet</a></p>
+<p>期刊：IEEE Transactions on Instrumentation and Measurement </p>
+<p><strong>35.Styleswin: Transformer-based gan for high-resolution image generation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/microsoft/StyleSwin">https://github.com/microsoft/StyleSwin</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>36.Unified transformer tracker for object tracking</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/flowerfan/trackron">https://github.com/flowerfan/trackron</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>37.Video Frame Interpolation with Transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/dvlab-research/vfiformer">https://github.com/dvlab-research/vfiformer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>38.Few-shot object detection with fully cross-transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/guangxinghan/fct">https://github.com/guangxinghan/fct</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>39.An efficient spatio-temporal pyramid transformer for action detection</strong></p>
+<p>会议：ECCV 2022 </p>
+<p><strong>40.Feature selection and classification of transformer faults based on novel meta-heuristic algo rithm</strong></p>
+<p>会议：Mathematics</p>
+<p><strong>41.MPViT: Multi-path vision transformer for dense prediction</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/youngwanLEE/MPViT">https://github.com/youngwanLEE/MPViT</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>42.Knowledge Distillation via the Target-aware Transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/sihaoevery/TaT">https://github.com/sihaoevery/TaT</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>43.Fast Point Transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/POSTECH-CVLab/FastPointTransformer">https://github.com/POSTECH-CVLab/FastPointTransformer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>44.Chemformer: a pre-trained transformer for computational chemistry</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/MolecularAI/Chemformer">https://github.com/MolecularAI/Chemformer</a></p>
+<p>期刊：Machine Learning: Science and Technology</p>
+<p><strong>45.Lite vision transformer with enhanced self-attention</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/chenglin-yang/lvt">https://github.com/chenglin-yang/lvt</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>46.End-to-end temporal action detection with transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/xlliu7/TadTR">https://github.com/xlliu7/TadTR</a></p>
+<p>期刊：IEEE Transactions on Image Processing</p>
+<p><strong>47.Stratified Transformer for 3D Point Cloud Segmentation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/dvlab-research/stratified-transformer">https://github.com/dvlab-research/stratified-transformer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>48.Image fusion transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/Vibashan/Image-Fusion-Transformer">https://github.com/Vibashan/Image-Fusion-Transformer</a></p>
+<p>会议：ICIP 2022</p>
+<p><strong>49.Embracing single stride 3d object detector with sparse transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/tusimple/sst">https://github.com/tusimple/sst</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>50.Msg-transformer: Exchanging local spatial information by manipulating messenger tokens 代码：<a target="_blank" rel="noopener" href="https://github.com/hustvl/MSG-Transformer">https://github.com/hustvl/MSG-Transformer</a></strong></p>
+<p>会议：CVPR 2022</p>
+<p><strong>51.Danceformer: Music conditioned 3d dance generation with parametric motion transformer</strong></p>
+<p> 代码：<a target="_blank" rel="noopener" href="https://huiye-tech.github.io/post/danceformer/">https://huiye-tech.github.io/post/danceformer/</a> </p>
+<p>会议：AAAI 2022</p>
+<p><strong>52.Video frame interpolation transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/dvlab-research/vfiformer">https://github.com/dvlab-research/vfiformer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>53.A-ViT: Adaptive Tokens for Efficient Vision Transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://a-vit.github.io/">https://a-vit.github.io/</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>54.Geometric transformer for fast and robust point cloud registration</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/qinzheng93/geotransformer">https://github.com/qinzheng93/geotransformer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>55.Temporally Efficient Vision Transformer for Video Instance Segmentation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/hustvl/tevit">https://github.com/hustvl/tevit</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>56.Multi-scale high-resolution vision transformer for semantic segmentation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/HRViT">https://github.com/facebookresearch/HRViT</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>57.Latr: Layout-aware transformer for scene-text vqa</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/uakarsh/latr">https://github.com/uakarsh/latr</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>58.Mask-guided spectral-wise transformer for efficient hyperspectral image reconstruction</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/caiyuanhao1998/MST">https://github.com/caiyuanhao1998/MST</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>59.Mvster: Epipolar transformer for efficient multi-view stereo</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/jeffwang987/mvster">https://github.com/jeffwang987/mvster</a></p>
+<p>会议：ECCV 2022</p>
+<p><strong>60.Recurrent glimpse-based decoder for detection with transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/zhechen/deformable-detr-rego">https://github.com/zhechen/deformable-detr-rego</a> </p>
+<p>会议：CVPR 2022</p>
+<p><strong>61.Mhformer: Multi-hypothesis transformer for 3d human pose estimation</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/Vegetebird/MHFormer">https://github.com/Vegetebird/MHFormer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>62.Shapeformer: Transformer-based shape completion via sparse representation</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://shapeformer.github.io/">https://shapeformer.github.io/</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>63.Styleformer: Transformer based generative adversarial networks with style vector</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/Jeeseung-Park/Styleformer">https://github.com/Jeeseung-Park/Styleformer</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>64.Transweather: Transformer-based restoration of images degraded by adverse weather condi tions</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/jeya-maria-jose/TransWeather">https://github.com/jeya-maria-jose/TransWeather</a></p>
+<p>会议：CVPR 2022</p>
+<p><strong>65.Opt: Open pre-trained transformer language models</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/metaseq">https://github.com/facebookresearch/metaseq</a> 预印：arXiv preprint arXiv</p>
+<p><strong>66.Transformer in transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/huawei-noah/CV-Backbones">https://github.com/huawei-noah/CV-Backbones</a></p>
+<p>期刊：Advances in Neural Information Processing Systems</p>
+<p><strong>67.Msa transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/The-AI-Summer/self-attention-cv">https://github.com/The-AI-Summer/self-attention-cv</a></p>
+<p>会议：ICML 2021</p>
+<p><strong>68.Point transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/POSTECH-CVLab/point-transformer">https://github.com/POSTECH-CVLab/point-transformer</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>69.Transformer tracking 代码：<a target="_blank" rel="noopener" href="https://github.com/chenxin-dlut/TransT">https://github.com/chenxin-dlut/TransT</a></strong></p>
+<p>会议：CVPR 2021</p>
+<p><strong>70.Vivit: A video vision transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/google-research/scenic">https://github.com/google-research/scenic</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>71.Video transformer network</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/bomri/SlowFast/blob/master/projects/vtn/README.md">https://github.com/bomri/SlowFast/blob/master/projects/vtn/README.md</a> </p>
+<p>会议：ICCV 2021 </p>
+<p><strong>72.Swin transformer: Hierarchical vision transformer using shifted windows</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/microsoft/Swin-Transformer">https://github.com/microsoft/Swin-Transformer</a> 会议：ICCV 2021</p>
+<p><strong>73.Swinir: Image restoration using swin transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/JingyunLiang/SwinIR">https://github.com/JingyunLiang/SwinIR</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>74.Pre-trained image processing transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/huawei-noah/Pretrained-IPT">https://github.com/huawei-noah/Pretrained-IPT</a></p>
+<p>会议：CVPR 2021</p>
+<p><strong>75.Segmenter: Transformer for semantic segmentation</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/rstrudel/segmenter">https://github.com/rstrudel/segmenter</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>76.Pct: Point cloud transformer</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/MenghaoGuo/PCT">https://github.com/MenghaoGuo/PCT</a> </p>
+<p>期刊：Computational Visual Media</p>
+<p><strong>77.Decision transformer: Reinforcement learning via sequence modeling</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/kzl/decision-transformer">https://github.com/kzl/decision-transformer</a></p>
+<p>期刊：Advances in neural information processing systems</p>
+<p><strong>78.Vilt: Vision-and-language transformer without convolution or region supervision</strong> </p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/dandelin/vilt">https://github.com/dandelin/vilt</a></p>
+<p>会议：ICML 2021</p>
+<p><strong>79.Rethinking transformer-based set prediction for object detection</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/edward-sun/tsp-detection">https://github.com/edward-sun/tsp-detection</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>80.Informer: Beyond efficient transformer for long sequence time-series forecasting</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/zhouhaoyi/Informer2020">https://github.com/zhouhaoyi/Informer2020</a></p>
+<p>会议：AAAI 2021</p>
+<p><strong>81.Crossvit: Cross-attention multi-scale vision transformer for image classification</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/IBM/CrossViT">https://github.com/IBM/CrossViT</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>82.Transformer interpretability beyond attention visualization</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/hila-chefer/Transformer-Explainability">https://github.com/hila-chefer/Transformer-Explainability</a> </p>
+<p>会议：CVPR 2021</p>
+<p><strong>83.Learning spatio-temporal transformer for visual tracking</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/researchmm/Stark">https://github.com/researchmm/Stark</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>84.Synthesizer: Rethinking self-attention for transformer models</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/10-zin/Synthesizer">https://github.com/10-zin/Synthesizer</a></p>
+<p>会议：ICML 2021</p>
+<p><strong>85.Transreid: Transformer-based object re-identification</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/heshuting555/TransReID">https://github.com/heshuting555/TransReID</a></p>
+<p>会议：ICCV 2021</p>
+<p><strong>86.Meshed-memory transformer for image captioning</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/aimagelab/meshed-memory-transformer">https://github.com/aimagelab/meshed-memory-transformer</a></p>
+<p>会议：CVPR 2020</p>
+<p><strong>87.Learning texture transformer network for image super-resolution</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/researchmm/TTSR">https://github.com/researchmm/TTSR</a></p>
+<p>会议：CVPR 2020</p>
+<p><strong>88.Streaming automatic speech recognition with the transformer model</strong></p>
+<p>会议：ICASSP 2020</p>
+<p><strong>89.On layer normalization in the transformer architecture</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/xformers">https://github.com/facebookresearch/xformers</a></p>
+<p>会议：ICML 2020 </p>
+<p><strong>90.Intellicode compose: Code generation using transformer</strong></p>
+<p>会议：ESEC&#x2F;FSE 2020</p>
+<p><strong>91.BEHRT: transformer for electronic health records</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/yikuanli/BEHRT">https://github.com/yikuanli/BEHRT</a></p>
+<p>期刊：Scientific reports </p>
+<p><strong>92.Heterogeneous graph transformer</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/acbull/pyHGT">https://github.com/acbull/pyHGT</a></p>
+<p>会议：Proceedings of The Web Conference 2020 </p>
+<p><strong>93.Transformer transducer: A streamable speech recognition model with transformer encoders and rnn-t loss</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/hasangchun/Transformer-Transducer">https://github.com/hasangchun/Transformer-Transducer</a></p>
+<p>会议：ICASSP 2020 </p>
+<p><strong>94.Exploring the limits of transfer learning with a unified text-to-text transformer.</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/google-research/text-to-text-transfer-transformer">https://github.com/google-research/text-to-text-transfer-transformer</a></p>
+<p>期刊：J. Mach. Learn. Res. </p>
+<p><strong>95.Multi-modal transformer for video retrieval</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/gabeur/mmt">https://github.com/gabeur/mmt</a></p>
+<p>会议：ECCV 2020 </p>
+<p><strong>96.Self-supervised graph transformer on large-scale molecular data</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/tencent-ailab/grover">https://github.com/tencent-ailab/grover</a></p>
+<p>期刊：Advances in Neural Information Processing Systems</p>
+<p><strong>97.Transformer-based acoustic modeling for hybrid speech recognition</strong></p>
+<p>会议：ICASSP 2020</p>
+<p><strong>98.State-of-the-art augmented NLP transformer models for direct and single-step retrosynthesis</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/bigchem/synthesis">https://github.com/bigchem/synthesis</a></p>
+<p>会议：Nature communications</p>
+<p><strong>99.Graph transformer for graph-to-sequence learning</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/jcyk/gtos">https://github.com/jcyk/gtos</a></p>
+<p>会议：AAAI 2020</p>
+<p><strong>100.Tanda: Transfer and adapt pre-trained transformer models for answer sentence selection</strong></p>
+<p>代码：<a target="_blank" rel="noopener" href="https://github.com/alexa/wqa_tanda">https://github.com/alexa/wqa_tanda</a></p>
+<p>会议：AAAI 2020</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://klayforever.cn/2023/07/13/100篇顶会论文transformer/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Klay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月13日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年7月13日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/29/Linux%E5%AD%A6%E4%B9%A0%EF%BC%88%E9%9F%A9%E9%A1%BA%E5%B9%B3%EF%BC%89/" title="linux韩顺平">
+                        <span class="hidden-mobile">linux韩顺平</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
