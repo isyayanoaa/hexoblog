@@ -45,7 +45,7 @@
 <meta property="og:image" content="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202307062118402.png">
 <meta property="og:image" content="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202307062119794.png">
 <meta property="article:published_time" content="2023-06-29T07:30:33.112Z">
-<meta property="article:modified_time" content="2023-07-13T03:04:31.939Z">
+<meta property="article:modified_time" content="2023-07-20T02:31:18.056Z">
 <meta property="article:author" content="Klay">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -259,7 +259,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          39k 字
+          41k 字
         
       </span>
     
@@ -270,7 +270,7 @@
         
         
         
-          329 分钟
+          345 分钟
         
       </span>
     
@@ -326,7 +326,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：5 小时前
+                    本文最后更新于：32 分钟前
                   
                 
               </p>
@@ -819,6 +819,22 @@
 
 <h4 id="10-7-2检测主机连接命令ping"><a href="#10-7-2检测主机连接命令ping" class="headerlink" title="10.7.2	检测主机连接命令ping"></a>10.7.2	检测主机连接命令ping</h4><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs armasm">是一种网络检测工具，它主要是用检测远程主机是否正常，或是两部主机间的网线或网卡故障。<br>如: ping 对方的<span class="hljs-built_in">ip</span>地址<br></code></pre></td></tr></table></figure>
 
+<h2 id="十一、Linux-实操篇-RPM-与-YUM"><a href="#十一、Linux-实操篇-RPM-与-YUM" class="headerlink" title="十一、Linux 实操篇- RPM 与 YUM"></a>十一、Linux 实操篇- RPM 与 YUM</h2><h3 id="11-1RPM"><a href="#11-1RPM" class="headerlink" title="11.1	RPM"></a>11.1	RPM</h3><h4 id="11-1-1介绍"><a href="#11-1-1介绍" class="headerlink" title="11.1.1	介绍"></a>11.1.1	介绍</h4><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-variable">RPM</span> 是 <span class="hljs-built_in">Red</span><span class="hljs-operator">-</span><span class="hljs-variable">Hat</span> <span class="hljs-built_in">Package</span> <span class="hljs-variable">Manager</span>（红帽软件包管理器）的缩写<br>这一文件格式名称虽然打上了<span class="hljs-variable">RedHat</span>的标志，但是其原始设计理念是开放式的，<br>包括<span class="hljs-variable">OpenLinux</span>、<span class="hljs-variable">S</span><span class="hljs-operator">.</span><span class="hljs-variable">u</span><span class="hljs-operator">.</span><span class="hljs-variable">S</span><span class="hljs-operator">.</span><span class="hljs-built_in">E</span><span class="hljs-operator">.</span>以及<span class="hljs-variable">Turbo</span> <span class="hljs-variable">Linux</span>等<span class="hljs-variable">Linux</span>的分发版本都有采用，可以算是公认的行业标准了。<br><br>是一种用于互联网下载包的打包及安装工具，它包含在某些<span class="hljs-variable">Linux</span>分发版中。它生成具有<span class="hljs-operator">.</span><span class="hljs-variable">RPM</span>扩展名的文件。<br><br>类似于 <span class="hljs-variable">windows</span> 的 <span class="hljs-variable">setup</span><span class="hljs-operator">.</span><span class="hljs-variable">exe</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="11-1-2rpm-的简单查询指令"><a href="#11-1-2rpm-的简单查询指令" class="headerlink" title="11.1.2	rpm 的简单查询指令"></a>11.1.2	rpm 的简单查询指令</h4><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs llvm">查询已安装的 rpm软件包 列表：<br>rpm –qa|grep xx <br>查询结果返回一个软件包的包名<br><br>举例：查看当前系统是否安装了 firefox <br>指令: rpm -qa | grep firefox<br>查询结果：firefox<span class="hljs-number">-60.2</span>.<span class="hljs-number">2</span><span class="hljs-number">-1</span>.el<span class="hljs-number">7</span>.centos.<span class="hljs-keyword">x</span><span class="hljs-number">86</span>_<span class="hljs-number">64</span><br>结果说明：<br>	软件名：firefox<br>	版本号：<span class="hljs-number">60.2</span>.<span class="hljs-number">2</span><span class="hljs-number">-1</span><br>	适用操作系统: el<span class="hljs-number">7</span>.centos.<span class="hljs-keyword">x</span><span class="hljs-number">86</span>_<span class="hljs-number">64</span> (表示 centos<span class="hljs-number">7</span>.<span class="hljs-keyword">x</span> 的 <span class="hljs-number">64</span> 位系统)<br>	如果是 <span class="hljs-type">i686</span>、<span class="hljs-type">i386</span> 表示 <span class="hljs-number">32</span> 位系统，noarch 表示通用(<span class="hljs-number">32</span>/<span class="hljs-number">64</span>位系统都适用)<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="11-1-3rpm-的其它查询指令"><a href="#11-1-3rpm-的其它查询指令" class="headerlink" title="11.1.3	rpm 的其它查询指令"></a>11.1.3	rpm 的其它查询指令</h4><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs vim">rpm -<span class="hljs-keyword">qa</span> 			(查询所安装的所有 rpm 软件包)<br><br>rpm -<span class="hljs-keyword">qa</span> | more  	(分页显示more)<br><br>rpm -<span class="hljs-keyword">qa</span> | <span class="hljs-keyword">grep</span> <span class="hljs-keyword">X</span>    (过滤,比如 rpm -<span class="hljs-keyword">qa</span> | <span class="hljs-keyword">grep</span> firefox )<br><br><br>rpm -q  软件包名      (查询某个软件包是否安装)<br>案例：rpm -q firefox<br><br>rpm -qi 软件包名   	 (查询软件包的详细信息)<br>案例: rpm -qi firefox<br><br>rpm -ql 软件包名 	 (查询软件包中的文件和该软件包在哪个文件下)<br>案例： rpm -ql firefox<br><br>rpm -qf 文件全路径名 	 (查询某个文件所属在哪个软件包)<br>案例：rpm -qf /etc/passwd<br>案例：rpm -qf /root/install.<span class="hljs-built_in">log</span><br><br></code></pre></td></tr></table></figure>
+
+<h4 id="11-1-4删除-rpm-软件包"><a href="#11-1-4删除-rpm-软件包" class="headerlink" title="11.1.4	删除 rpm 软件包"></a>11.1.4	删除 rpm 软件包</h4><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs subunit">基本语法：rpm -e RPM软件包的名称	//-e erase擦去<br>案例：删除 firefox 软件包<br>rpm -e firefox<br><br><br>注意：<br>(1)如果其它软件包依赖于您要删除的软件包，删除时则会产生错误信息。<br>如：	<br>rpm -e foo<br>removing these packages would break dependencies:foo is needed by bar<span class="hljs-string">-1</span>.0<span class="hljs-string">-1</span><br>foo软件包被 bar<span class="hljs-string">-1</span>.0<span class="hljs-string">-1</span>需要，删除foo对barr<span class="hljs-string">-1</span>.0<span class="hljs-string">-1</span>有影响<br><br>(2)如果我们就是要删除 foo 这个 rpm 包，可以增加参数 --nodeps ,就可以强制删除<br>   但是一般不推荐这样做，因为依赖于该软件包的程序可能无法运行<br>如：rpm -e --nodeps foo            (nodeps 不检查依赖关系 no dependencies)<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="11-1-5安装-rpm-软件包"><a href="#11-1-5安装-rpm-软件包" class="headerlink" title="11.1.5	安装 rpm 软件包"></a>11.1.5	安装 rpm 软件包</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs awk">基本语法：rpm -ivh RPM软件包全路径名称<br><br>rpm软件包其实是一个软件的安装包<br>点击Linux系统桌面的光盘，里面有一个Packages文件夹，这个文件夹里有很多rpm软件安装包<br><br>在<span class="hljs-regexp">/run/m</span>edia<span class="hljs-regexp">/root/</span>CentOS\ <span class="hljs-number">7</span>\ x86_64<span class="hljs-regexp">/Packages/</span> 目录下<br><br><br>选项：<br>	i=install 安装<br>	v=verbose 提示<br>	h=hash	  进度条<br><br><br>应用实例：<br>演示卸载和安装 firefox 浏览器<br>rpm -e firefox <br>rpm -ivh <span class="hljs-regexp">/run/m</span>edia<span class="hljs-regexp">/root/</span>CentOS\ <span class="hljs-number">7</span>\ x86_64<span class="hljs-regexp">/Packages/</span>firefox-<span class="hljs-number">60.2</span>.<span class="hljs-number">2</span>-<span class="hljs-number">1</span>.el7.centos.x86_64.rpm<br><br>也可以在Packages中找到firefox安装包，复制到某一个目录下，这样写路径简单<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="11-2yum"><a href="#11-2yum" class="headerlink" title="11.2	yum"></a>11.2	yum</h3><h4 id="11-2-1介绍"><a href="#11-2-1介绍" class="headerlink" title="11.2.1	介绍"></a>11.2.1	介绍</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs 1c">Yum（全称为 Yellow dog Updater, Modified）是一个 Shell 前端软件包管理器。<br>基于 RPM 包管理，能够从指定的服务器自动下载 RPM 包并且安装，<br>可以自动处理依赖性关系，并且一次安装所有依赖的软件包。<br><br>使用 yum list<span class="hljs-string">|grep 软件名 向yum服务器查询有没有该软件</span><br>有的话，使用 yum install 软件名 下载安装该软件<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="11-2-2-yum-的基本指令"><a href="#11-2-2-yum-的基本指令" class="headerlink" title="11.2.2.	yum 的基本指令"></a>11.2.2.	yum 的基本指令</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs 1c">查询 yum 服务器是否有 需要安装的软件：<br>yum list<span class="hljs-string">|grep 软件名</span><br><br>安装指定的软件：<br>yum install 软件名<br><br>案例：请使用 yum 的方式来安装 firefox <br>rpm -e firefox<br>yum list <span class="hljs-string">| grep firefox </span><br>yum install firefox<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="11-3总结"><a href="#11-3总结" class="headerlink" title="11.3	总结"></a>11.3	总结</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">rpm 是从本地安装包下载,本地必须有<span class="hljs-string">.rpm</span>文件才可使用<br>yum 是从yum服务器下载安装软件,可以直接下载<br></code></pre></td></tr></table></figure>
+
 
                 
               </div>
@@ -883,7 +899,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年7月13日</div>
+          <div>2023年7月20日</div>
         </div>
       
       
