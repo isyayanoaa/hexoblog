@@ -1,0 +1,849 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202307030854652.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Klay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="不管是Linux还是Windows中的库文件其本质和工作模式都是相同的, 只不过在不同的平台上库对应的文件格式和文件后缀不同。程序中调用的库有两种 静态库和动态库，不管是哪种库文件本质是还是源文件，只不过是二进制格式只有计算机能够识别，作为一个普通人就无能为力了。 在项目中使用库一般有两个目的，一个是为了使程序更加简洁不需要在项目中维护太多的源文件，另一方面是为了源代码保密，毕竟不是所有人都想把自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态库和静态库">
+<meta property="og:url" content="http://klayforever.cn/2023/07/28/%E5%8A%A8%E6%80%81%E5%BA%93%E5%92%8C%E9%9D%99%E6%80%81%E5%BA%93/index.html">
+<meta property="og:site_name" content="Myshop">
+<meta property="og:description" content="不管是Linux还是Windows中的库文件其本质和工作模式都是相同的, 只不过在不同的平台上库对应的文件格式和文件后缀不同。程序中调用的库有两种 静态库和动态库，不管是哪种库文件本质是还是源文件，只不过是二进制格式只有计算机能够识别，作为一个普通人就无能为力了。 在项目中使用库一般有两个目的，一个是为了使程序更加简洁不需要在项目中维护太多的源文件，另一方面是为了源代码保密，毕竟不是所有人都想把自">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202308031842259.png">
+<meta property="article:published_time" content="2023-07-28T08:53:15.621Z">
+<meta property="article:modified_time" content="2023-08-28T12:59:34.026Z">
+<meta property="article:author" content="Klay">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="动态库和静态库">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202308031842259.png">
+  
+  
+  
+  <title>动态库和静态库 - Myshop</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"klayforever.cn","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>klay4ever</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>主页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于我</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="动态库和静态库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        Klay
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-28 16:53" pubdate>
+          2023年7月28日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          62 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">动态库和静态库</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：4 天前
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>不管是Linux还是Windows中的库文件其本质和工作模式都是相同的, 只不过在不同的平台上库对应的文件格式和文件后缀不同。程序中调用的库有两种 静态库和动态库，不管是哪种库文件本质是还是源文件，只不过是二进制格式只有计算机能够识别，作为一个普通人就无能为力了。</p>
+<p>在项目中使用库一般有两个目的，一个是为了使程序更加简洁不需要在项目中维护太多的源文件，另一方面是为了源代码保密，毕竟不是所有人都想把自己编写的程序开源出来。</p>
+<p>当我们拿到了库文件（动态库、静态库）之后要想使用还必须有这些库中提供的API函数的声明，也就是头文件，把这些都添加到项目中，就可以快乐的写代码了。</p>
+<span id="more"></span>
+
+<h1 id="动态库和静态库"><a href="#动态库和静态库" class="headerlink" title="动态库和静态库"></a>动态库和静态库</h1><h2 id="1、静态库"><a href="#1、静态库" class="headerlink" title="1、静态库"></a>1、静态库</h2><p>在Linux中静态库由程序 ar 生成，现在静态库已经不像之前那么普遍了，这主要是由于程序都在使用动态库。关于静态库的命名规则如下:</p>
+<ul>
+<li>在Linux中静态库以<strong>lib</strong>作为<strong>前缀</strong>, 以**.a<strong>作为</strong>后缀,** 中间是库的名字自己指定即可, 即: <strong>libxxx.a</strong></li>
+<li>在Windows中静态库一般以<strong>lib</strong>作为<strong>前缀</strong>，以<strong>lib</strong>作为<strong>后缀</strong>，中间是库的名字需要自己指定, 即: <strong>libxxx.lib</strong></li>
+</ul>
+<h3 id="1-1生成静态库"><a href="#1-1生成静态库" class="headerlink" title="1.1	生成静态库"></a>1.1	生成静态库</h3><p>生成静态库，需要先对源文件进行<strong>汇编操作</strong> (使用参数 -c) 得到二进制格式的目标文件 <strong>(.o 格式)</strong>, 然后在通过 <strong>ar</strong>工具将目标文件打包就可以得到静态库文件了 **(libxxx.a)**。</p>
+<p>使用ar工具创建静态库的时候需要三个参数:</p>
+<ul>
+<li><p>参数c：创建一个库，不管库是否存在，都将创建。</p>
+</li>
+<li><p>参数s：创建目标文件索引，这在创建较大的库时能加快时间。</p>
+</li>
+<li><p>参数r：在库中插入模块(替换)。默认新的成员添加在库的结尾处，如果模块名已经在库中存在，则替换同名的模块。</p>
+</li>
+</ul>
+<p><strong>生成静态链接库的具体步骤如下:</strong></p>
+<p>1.需要将源文件进行汇编，得到.o文件，需要使用参数-c</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">执行如下操作生成.o文件</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">-c参数位置没有要求</span><br>gcc *.c -c <br></code></pre></td></tr></table></figure>
+
+<p>2.将得到的.o进行打包，得到静态库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ar rcs 静态库的名字(libxxx.a) 原材料(*.o)<br></code></pre></td></tr></table></figure>
+
+<p>3.发布静态库</p>
+<h3 id="1-2静态库制作举例"><a href="#1-2静态库制作举例" class="headerlink" title="1.2	静态库制作举例"></a>1.2	静态库制作举例</h3><h4 id="1-2-1准备测试程序"><a href="#1-2-1准备测试程序" class="headerlink" title="1.2.1	准备测试程序"></a>1.2.1	准备测试程序</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">目录结构 add.c div.c mult.c sub.c -&gt; 算法的源文件, 函数声明在头文件 head.h</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">main.c中是对接口的测试程序, 制作库的时候不需要将 main.c 算进去</span><br>.<br>├── add.c<br>├── div.c<br>├── include<br>│   └── head.h<br>├── main.c<br>├── mult.c<br>└── sub.c<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-2-2生成静态库"><a href="#1-2-2生成静态库" class="headerlink" title="1.2.2	生成静态库"></a>1.2.2	生成静态库</h4><p>第一步: 将源文件<strong>add.c, div.c, mult.c, sub.c</strong> 进行汇编, 得到二进制目标文件 <strong>add.o, div.o, mult.o, sub.o</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">1. 生成.o</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc add.c div.c mult.c sub.c -c</span><br>sub.c:2:18: fatal error: head.h: No such file or directory<br>compilation terminated.<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">提示头文件找不到, 添加参数 -I 重新头文件路径即可</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc add.c div.c mult.c sub.c -c -I ./include/</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看目标文件是否已经生成</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">tree</span><br>.<br>├── add.c<br>├── add.o            # 目标文件<br>├── div.c<br>├── div.o            # 目标文件<br>├── include<br>│   └── head.h<br>├── main.c<br>├── mult.c<br>├── mult.o           # 目标文件<br>├── sub.c<br>└── sub.o            # 目标文件<br></code></pre></td></tr></table></figure>
+
+<p>第二步: 将生成的目标文件通过 ar工具打包生成静态库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">2. 将生成的目标文件 .o 打包成静态库</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">ar rcs libcalc.a a.o b.o c.o    <span class="hljs-comment"># a.o b.o c.o在同一个目录中可以写成 *.o</span></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看目录中的文件</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">tree</span><br>.<br>├── add.c<br>├── add.o<br>├── div.c<br>├── div.o<br>├── include<br>│   └── `head.h  ===&gt; 和静态库一并发布<br>├── `libcalc.a   ===&gt; 生成的静态库<br>├── main.c<br>├── mult.c<br>├── mult.o<br>├── sub.c<br>└── sub.o<br></code></pre></td></tr></table></figure>
+
+<p>第三步: 将生成的的静态库 <strong>libcalc.a</strong>和库对应的头文件<strong>head.h</strong>一并发布给使用者就可以了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">3. 发布静态库</span><br>	1. head.h    =&gt; 函数声明<br>	2. libcalc.a =&gt; 函数定义(二进制格式)<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-3静态库的使用"><a href="#1-3静态库的使用" class="headerlink" title="1.3	静态库的使用"></a>1.3	静态库的使用</h3><p>当我们得到了一个可用的静态库之后, 需要将其放到一个目录中, 然后根据得到的头文件编写测试代码, 对静态库中的函数进行调用。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">1. 首先拿到了发布的静态库</span><br>	`head.h` 和 `libcalc.a`<br><span class="hljs-meta prompt_">	</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">2. 将静态库, 头文件, 测试程序放到一个目录中准备进行测试</span><br>.<br>├── head.h          # 函数声明<br>├── libcalc.a       # 函数定义（二进制格式）<br>└── main.c          # 函数测试<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">3. 编译测试程序 main.c</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc main.c -o app</span><br>/tmp/ccR7Fk49.o: In function `main&#x27;:<br>main.c:(.text+0x38): undefined reference to `add&#x27;<br>main.c:(.text+0x58): undefined reference to `subtract&#x27;<br>main.c:(.text+0x78): undefined reference to `multiply&#x27;<br>main.c:(.text+0x98): undefined reference to `divide&#x27;<br>collect2: error: ld returned 1 exit status<br><br></code></pre></td></tr></table></figure>
+
+<p>​	编译的源文件中包含了头文件 <strong>head.h</strong>, 这个头文件中声明的函数对应的定义（也就是函数体实现）<strong>在静态库中</strong>，程序在编译的时候<strong>没有找到函数实现</strong>，因此提示 undefined reference to xxxx。</p>
+<p>解决方案：在编译的时将静态库的路径和名字都指定出来</p>
+<ul>
+<li>-L: 指定库所在的目录(相对或者绝对路径)</li>
+<li>-l: 指定库的名字, 需要掐头(lib)去尾(.a) 剩下的才是需要的静态库的名字</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">4. 编译的时候指定库信息</span><br>	-L: 指定库所在的目录(相对或者绝对路径)<br>	-l: 指定库的名字, 掐头(lib)去尾(.a) ==&gt; calc<br><span class="hljs-meta prompt_"># </span><span class="language-bash">-L -l, 参数和参数值之间可以有空格, 也可以没有  -L./ -lcalc</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc main.c -o app -L ./ -l calc</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看目录信息, 发现可执行程序已经生成了</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">tree</span><br>.<br>├── app   		# 生成的可执行程序<br>├── head.h<br>├── libcalc.a<br>└── main.c<br></code></pre></td></tr></table></figure>
+
+<h2 id="2、动态库"><a href="#2、动态库" class="headerlink" title="2、动态库"></a>2、动态库</h2><p><strong>动态链接库</strong>是程序运行时加载的库，当动态链接库正确部署之后，运行的多个程序可以使用同一个加载到内存中的<strong>动态库</strong>，因此在Linux中动态链接库也可称之为<strong>共享库</strong>。</p>
+<p>动态链接库是<strong>目标文件的集合</strong>，目标文件在动态该链接库中的组织方式是按照特殊方式形成的。库中函数和变量的地址使用的是<strong>相对地址</strong>（静态库中使用的是绝对地址），其真实地址是在应用程序<strong>加载动态库时</strong>形成的。</p>
+<p>关于动态库的<strong>命名规则</strong>如下：</p>
+<ul>
+<li><p>在Linux中动态库以lib作为前缀, 以.so作为后缀, 中间是库的名字自己指定即可, 即: libxxx.so</p>
+</li>
+<li><p>在Windows中动态库一般以lib作为前缀, 以dll作为后缀, 中间是库的名字需要自己指定, 即: libxxx.dll</p>
+</li>
+</ul>
+<h3 id="2-1生成动态链接库"><a href="#2-1生成动态链接库" class="headerlink" title="2.1	生成动态链接库"></a>2.1	生成动态链接库</h3><p>生成动态链接库是直接使用gcc命令并且需要添加**-fPIC<strong>（-fpic） 以及</strong>-shared** 参数。</p>
+<ul>
+<li>-fPIC 或 -fpic 参数的作用是使得 gcc 生成的代码是与位置无关的，也就是使用相对位置</li>
+<li>-shared参数的作用是告诉编译器生成一个动态链接库</li>
+</ul>
+<p><img src="https://feng-typora-picture-bed.oss-cn-beijing.aliyuncs.com/img_for_typora202308031842259.png" srcset="/img/loading.gif" lazyload alt="image-20230803184229204"></p>
+<p>生成动态链接库的具体步骤如下:</p>
+<ol>
+<li>将源文件进行汇编操作，需要使用参数-c，海域要添加额外参数-fpic &#x2F; -fPIC</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">得到若干个 .o文件</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc 源文件(*.c) -c -fpic</span><br></code></pre></td></tr></table></figure>
+
+<p>​	2.将得到的.o文件打包成动态库, 还是使用gcc, 使用参数 -shared 指定生成动态库(位置没有要求)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc -shared 与位置无关的目标文件(*.o) -o 动态库(libxxx.so)</span><br></code></pre></td></tr></table></figure>
+
+<p>​	3.发布动态库和头文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">发布</span><br> 	1. 提供头文件: xxx.h<br> 	2. 提供动态库: libxxx.so<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2动态库制作举例"><a href="#2-2动态库制作举例" class="headerlink" title="2.2	动态库制作举例"></a>2.2	动态库制作举例</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">举例, 示例目录如下:</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">目录结构 add.c div.c mult.c sub.c -&gt; 算法的源文件, 函数声明在头文件 head.h</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">main.c中是对接口的测试程序, 制作库的时候不需要将 main.c 算进去</span><br>.<br>├── add.c<br>├── div.c<br>├── include<br>│   └── head.h<br>├── main.c<br>├── mult.c<br>└── sub.c<br></code></pre></td></tr></table></figure>
+
+<p><strong>第一步: 使用gcc将源文件进行汇编(参数-c), 生成与位置无关的目标文件, 需要使用参数 -fpic或者-fPIC</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">1. 将.c汇编得到.o, 需要额外的参数 -fpic/-fPIC</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc add.c div.c mult.c sub.c -c -fpic -I ./include/</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">	-fPIC 或 -fpic 参数的作用是使得 gcc 生成的代码是与位置无关的，也就是使用相对位置</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看目录文件信息, 检查是否生成了目标文件</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">tree</span><br>.<br>├── add.c<br>├── add.o                # 生成的目标文件<br>├── div.c<br>├── div.o                # 生成的目标文件<br>├── include<br>│   └── head.h<br>├── main.c<br>├── mult.c<br>├── mult.o               # 生成的目标文件<br>├── sub.c<br>└── sub.o                # 生成的目标文件<br></code></pre></td></tr></table></figure>
+
+<p><strong>第二步: 使用gcc将得到的目标文件打包生成动态库, 需要使用参数 -shared</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">2. 将得到 .o 打包成动态库, 使用gcc , 参数 -shared</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc -shared add.o div.o mult.o sub.o -o libcalc.so</span>  <br><span class="hljs-meta prompt_"># </span><span class="language-bash">	-shared参数的作用是告诉编译器生成一个动态链接库</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">检查目录中是否生成了动态库</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">tree</span><br>.<br>├── add.c<br>├── add.o<br>├── div.c<br>├── div.o<br>├── include<br>│   └── `head.h   ===&gt; 和动态库一起发布<br>├── `libcalc.so   ===&gt; 生成的动态库<br>├── main.c<br>├── mult.c<br>├── mult.o<br>├── sub.c<br>└── sub.o<br></code></pre></td></tr></table></figure>
+
+<p><strong>第三步: 发布生成的动态库和相关的头文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">3. 发布库文件和头文件</span><br>	1. head.h<br>	2. libcalc.so<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3动态库的使用"><a href="#2-3动态库的使用" class="headerlink" title="2.3	动态库的使用"></a>2.3	动态库的使用</h3><p>当我们得到了一个可用的动态库之后, 需要将其放到一个目录中, 然后根据得到的头文件编写测试代码, 对动态库中的函数进行调用。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">1. 拿到发布的动态库</span><br>	`head.h   libcalc.so<br><span class="hljs-meta prompt_"># </span><span class="language-bash">2. 基于头文件编写测试程序, 测试动态库中提供的接口是否可用</span><br>	`main.c`<br><span class="hljs-meta prompt_"># </span><span class="language-bash">示例目录:</span><br>.<br>├── head.h          ==&gt; 函数声明<br>├── libcalc.so      ==&gt; 函数定义<br>└── main.c          ==&gt; 函数测试<br></code></pre></td></tr></table></figure>
+
+<p><strong>编译测试程序</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">3. 编译测试程序</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc main.c -o app</span><br>/tmp/ccwlUpVy.o: In function `main&#x27;:<br>main.c:(.text+0x38): undefined reference to `add&#x27;<br>main.c:(.text+0x58): undefined reference to `subtract&#x27;<br>main.c:(.text+0x78): undefined reference to `multiply&#x27;<br>main.c:(.text+0x98): undefined reference to `divide&#x27;<br>collect2: error: ld returned 1 exit status<br></code></pre></td></tr></table></figure>
+
+<p>错误原因:</p>
+<p>和使用静态库一样, 在编译的时候需要指定库相关的信息: 库的路径 -L和 库的名字 -l</p>
+<p><strong>添加库信息相关参数, 重新编译测试代码:</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">在编译的时候指定动态库相关的信息: 库的路径 -L, 库的名字 -l</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">gcc main.c -o app -L./ -lcalc</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">-l中间可以不加空格</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看是否生成了可执行程序</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">tree</span><br>.<br>├── app 			# 生成的可执行程序<br>├── head.h<br>├── libcalc.so<br>└── main.c<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">执行生成的可执行程序, 错误提示 ==&gt; 可执行程序执行的时候找不到动态库</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">./app</span> <br>./app: error while loading shared libraries: libcalc.so: cannot open shared object file: No such file or directory<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-4-解决动态库无法加载问题"><a href="#2-4-解决动态库无法加载问题" class="headerlink" title="2.4 解决动态库无法加载问题"></a>2.4 解决动态库无法加载问题</h3><h4 id="2-4-1-库的工作原理"><a href="#2-4-1-库的工作原理" class="headerlink" title="2.4.1 库的工作原理"></a>2.4.1 库的工作原理</h4><ul>
+<li>静态库如何被加载</li>
+</ul>
+<p>​		在程序编译的最后一个阶段也就是链接阶段，提供的静态库会被打包到可执行程序中。当可执行程序被执行，静态库中的代码也会一并被加载到内存中，因此不会出现静态库找不到无法被加载的问题。</p>
+<ul>
+<li>动态库如何被加载</li>
+</ul>
+<p>​		<strong>在程序编译的最后一个阶段也就是链接阶段：</strong></p>
+<p>​		在gcc命令中虽然指定了库路径(使用参数 -L ), 但是这个路径并没有记录到可执行程序中，只是检查了这个路径下的库文件是否存在。</p>
+<p>​		同样对应的动态库文件也没有被打包到可执行程序中，只是在可执行程序中记录了库的名字。</p>
+<p>​		<strong>可执行程序被执行起来之后:</strong></p>
+<p>​		程序执行的时候会先检测需要的动态库是否可以被加载，加载不到就会提示上边的错误信息</p>
+<p>​		当动态库中的函数在程序中被调用了, 这个时候动态库才加载到内存，如果不被调用就不加载</p>
+<p>​		动态库的检测和内存加载操作都是由动态连接器来完成的</p>
+<h4 id="2-4-2-动态链接器"><a href="#2-4-2-动态链接器" class="headerlink" title="2.4.2 动态链接器"></a>2.4.2 动态链接器</h4><p>动态链接器是一个独立于应用程序的进程, 属于操作系统, 当用户的程序需要加载动态库的时候动态连接器就开始工作了，很显然动态连接器根本就不知道用户通过 gcc 编译程序的时候通过参数 -L指定的路径。</p>
+<p>那么动态链接器是如何搜索某一个动态库的呢，在它内部有一个默认的搜索顺序，按照优先级从高到低的顺序分别是：</p>
+<ol>
+<li>可执行文件内部的 DT_RPATH 段</li>
+<li>系统的环境变量 LD_LIBRARY_PATH</li>
+<li>系统动态库的缓存文件 &#x2F;etc&#x2F;ld.so.cache</li>
+<li>存储动态库&#x2F;静态库的系统目录 &#x2F;lib&#x2F;, &#x2F;usr&#x2F;lib等</li>
+</ol>
+<p>按照以上四个顺序, 依次搜索, 找到之后结束遍历, 最终还是没找到, 动态连接器就会提示动态库找不到的错误信息。</p>
+<h4 id="2-4-3-解决方案"><a href="#2-4-3-解决方案" class="headerlink" title="2.4.3 解决方案"></a>2.4.3 解决方案</h4><p>可执行程序生成之后, 根据动态链接器的搜索路径, 我们可以提供三种解决方案，我们只需要将动态库的路径放到对应的环境变量或者系统配置文件中，同样也可以将动态库拷贝到系统库目录（或者是将动态库的软链接文件放到这些系统库目录中）。</p>
+<p><strong>方案1:</strong> 将库路径添加到环境变量 LD_LIBRARY_PATH 中</p>
+<ol>
+<li>找到相关的配置文件</li>
+</ol>
+<p>​		用户级别: ~&#x2F;.bashrc —&gt; 设置对当前用户有效</p>
+<p>​		系统级别: &#x2F;etc&#x2F;profile —&gt; 设置对所有用户有效</p>
+<p>​	2.使用 vim 打开配置文件, 在文件最后添加这样一句话</p>
+<p>​	<strong>export LIBRARY_PATH&#x3D;$LIBRARY_PATH:动态库的绝对路径</strong></p>
+<p>​	3.让修改的配置文件生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">修改的是哪一个就执行对应的那个命令</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">source</span> 可以简写为一个 . , 作用是让文件内容被重新加载</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">source</span> ~/.bashrc          (. ~/.bashrc)</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash"><span class="hljs-built_in">source</span> /etc/profile       (. /etc/profile)</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>方案2:</strong> 更新 &#x2F;etc&#x2F;ld.so.cache 文件</p>
+<p>1.找到动态库所在的绝对路径（不包括库的名字）比如：&#x2F;home&#x2F;robin&#x2F;Library&#x2F;</p>
+<p>2.使用vim 修改 &#x2F;etc&#x2F;ld.so.conf 这个文件, 将上边的路径添加到文件中(独自占一行)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">1. 打开文件</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo vim /etc/ld.so.conf</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">2. 添加动态库路径, 并保存退出</span><br></code></pre></td></tr></table></figure>
+
+<p>3.更新 &#x2F;etc&#x2F;ld.so.conf中的数据到 &#x2F;etc&#x2F;ld.so.cache 中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">必须使用管理员权限执行这个命令</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">sudo ldconfig</span>   <br></code></pre></td></tr></table></figure>
+
+<p><strong>方案3:</strong> 拷贝动态库文件到系统库目录 &#x2F;lib&#x2F; 或者 &#x2F;usr&#x2F;lib 中 (或者将库的软链接文件放进去)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">库拷贝</span><br>sudo cp /xxx/xxx/libxxx.so /usr/lib<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">创建软连接</span><br>sudo ln -s /xxx/xxx/libxxx.so /usr/lib/libxxx.so<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-4-4-验证"><a href="#2-4-4-验证" class="headerlink" title="2.4.4 验证"></a>2.4.4 验证</h4><p>在启动可执行程序之前, 或者在设置了动态库路径之后, 我们可以通过一个命令检测程序能不能够通过动态链接器加载到对应的动态库, 这个命令叫做 <strong>ldd</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">语法:</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">ldd 可执行程序名</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">举例:</span><br><span class="hljs-meta prompt_">$ </span><span class="language-bash">ldd app</span><br>	linux-vdso.so.1 =&gt;  (0x00007ffe8fbd6000)<br>    libcalc.so =&gt; /home/robin/Linux/3Day/calc/test/libcalc.so (0x00007f5d85dd4000)<br>    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5d85a0a000)<br>    /lib64/ld-linux-x86-64.so.2 (0x00007f5d85fd6000)  ==&gt; 动态链接器, 操作系统提供<br></code></pre></td></tr></table></figure>
+
+<h2 id="3、优缺点"><a href="#3、优缺点" class="headerlink" title="3、优缺点"></a>3、优缺点</h2><h3 id="3-1静态库"><a href="#3-1静态库" class="headerlink" title="3.1	静态库"></a>3.1	静态库</h3><p>优点：</p>
+<ul>
+<li>静态库被打包到应用程序中加载速度快</li>
+<li>发布程序无需提供静态库，移植方便</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>相同的库文件数据可能在内存中被加载多份, 消耗系统资源，浪费内存</li>
+<li>库文件更新需要重新编译项目文件, 生成新的可执行程序, 浪费时间。</li>
+</ul>
+<h3 id="3-2-动态库"><a href="#3-2-动态库" class="headerlink" title="3.2 动态库"></a>3.2 动态库</h3><p>优点：</p>
+<ul>
+<li>可实现不同进程间的资源共享</li>
+<li>动态库升级简单, 只需要替换库文件, 无需重新编译应用程序</li>
+<li>程序猿可以控制何时加载动态库, 不调用库函数动态库不会被加载</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>加载速度比静态库慢, 以现在计算机的性能可以忽略</li>
+<li>发布程序需要提供依赖的动态库</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/">#C++</a>
+      
+        <a href="/tags/Linux/">#Linux</a>
+      
+        <a href="/tags/%E5%8A%A8%E6%80%81%E5%BA%93%E5%92%8C%E9%9D%99%E6%80%81%E5%BA%93/">#动态库和静态库</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>动态库和静态库</div>
+      <div>http://klayforever.cn/2023/07/28/动态库和静态库/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Klay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年8月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/25/gcc%E5%92%8Cg++/" title="GCC">
+                        <span class="hidden-mobile">GCC</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
