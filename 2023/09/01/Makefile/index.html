@@ -24,7 +24,7 @@
 <meta property="og:description" content="Makefile使用 GCC 的命令行进行程序编译在单个文件下是比较方便的，当工程中的文件逐渐增多，甚至变得十分庞大的时候，使用 GCC 命令编译就会变得力不从心。这种情况下我们需要借助项目构造工具 make 帮助我们完成这个艰巨的任务。 make是一个命令工具，是一个解释makefile中指令的命令工具，一般来说，大多数的IDE都有这个命令，比如：Visual C++的nmake，QtCreat">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-01T01:53:36.023Z">
-<meta property="article:modified_time" content="2023-09-24T13:06:33.739Z">
+<meta property="article:modified_time" content="2023-09-24T13:33:58.574Z">
 <meta property="article:author" content="Klay">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -303,7 +303,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：16 分钟前
+                    本文最后更新于：17 天前
                   
                 
               </p>
@@ -545,7 +545,7 @@
 <p>这个版本的优点：<strong>书写简单</strong></p>
 <p>这版本的缺点：<strong>只要依赖中的某一个源文件被修改，所有的源文件都需要被重新编译，太耗时、效率低</strong></p>
 <p>改进方式：<strong>提高效率，修改哪一个源文件, 哪个源文件被重新编译, 不修改就不重新编译</strong></p>
-<h3 id="6-2版本2"><a href="#6-2版本2" class="headerlink" title="6.2	版本2"></a>6.2	版本2</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 	默认所有依赖都不存在，需要使用其他规则生成这些依赖</span><br><span class="hljs-comment"># 	当其中的某一个依赖被更新了，则需要使用最新的依赖，生成最新的目标</span><br><span class="hljs-section">calc:add.o div.o sub.o mult.o main.c</span><br>	gcc add.o div.o sub.o mult.o main.c -o calc<br><span class="hljs-section">add.o:add.c</span><br>	gcc add.c -c <br><span class="hljs-section">div.o:div.c</span><br>	gcc div.c -c <br><span class="hljs-section">sub.o:sub.c</span><br>	gcc sub.c -c <br><span class="hljs-section">mult.o:mult.c</span><br>	gcc mult.c -c <br><span class="hljs-section">main.o:main.c</span><br>	gcc main.c -c<br></code></pre></td></tr></table></figure>
+<h3 id="6-2版本2"><a href="#6-2版本2" class="headerlink" title="6.2	版本2"></a>6.2	版本2</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs makefile"><span class="hljs-comment"># 	默认所有依赖都不存在，需要使用其他规则生成这些依赖</span><br><span class="hljs-comment"># 	当其中的某一个依赖被更新了，则需要使用最新的依赖，生成最新的目标</span><br><span class="hljs-section">calc:add.o div.o sub.o mult.o main.c</span><br>	gcc add.o div.o sub.o mult.o main.o -o calc<br><span class="hljs-section">add.o:add.c</span><br>	gcc add.c -c <br><span class="hljs-section">div.o:div.c</span><br>	gcc div.c -c <br><span class="hljs-section">sub.o:sub.c</span><br>	gcc sub.c -c <br><span class="hljs-section">mult.o:mult.c</span><br>	gcc mult.c -c <br><span class="hljs-section">main.o:main.c</span><br>	gcc main.c -c<br></code></pre></td></tr></table></figure>
 
 <p>这个版本的优点：<strong>相较于版本1效率提升了</strong></p>
 <p>这个版本的缺点：<strong>规则比较冗余, 需要精简</strong></p>

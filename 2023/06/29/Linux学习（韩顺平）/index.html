@@ -50,7 +50,7 @@
 <meta property="og:image" content="c:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230725100936162.png">
 <meta property="og:image" content="c:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20230725100555724.png">
 <meta property="article:published_time" content="2023-06-29T07:30:33.112Z">
-<meta property="article:modified_time" content="2023-09-02T13:16:45.650Z">
+<meta property="article:modified_time" content="2023-10-10T06:05:55.460Z">
 <meta property="article:author" content="Klay">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
@@ -275,7 +275,7 @@
         
         
         
-          508 分钟
+          511 分钟
         
       </span>
     
@@ -331,7 +331,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：22 天前
+                    本文最后更新于：1 天前
                   
                 
               </p>
@@ -913,7 +913,7 @@
 <h4 id="13-2-2Linux远程登录Ubuntu"><a href="#13-2-2Linux远程登录Ubuntu" class="headerlink" title="13.2.2	Linux远程登录Ubuntu"></a>13.2.2	Linux远程登录Ubuntu</h4><ul>
 <li>​	安装和启用同上</li>
 <li>​	基本语法：ssh 用户名@IP</li>
-<li>​	例如：ssh <a href="mailto:&#107;&#x6c;&#97;&#x79;&#x40;&#x31;&#57;&#x32;&#x2e;&#49;&#54;&#x38;&#46;&#x31;&#x38;&#56;&#46;&#49;&#x33;&#48;">&#107;&#x6c;&#97;&#x79;&#x40;&#x31;&#57;&#x32;&#x2e;&#49;&#54;&#x38;&#46;&#x31;&#x38;&#56;&#46;&#49;&#x33;&#48;</a></li>
+<li>​	例如：ssh <a href="mailto:&#107;&#108;&#97;&#121;&#64;&#x31;&#x39;&#50;&#46;&#x31;&#54;&#56;&#46;&#49;&#56;&#x38;&#x2e;&#49;&#51;&#48;">&#107;&#108;&#97;&#121;&#64;&#x31;&#x39;&#50;&#46;&#x31;&#54;&#56;&#46;&#49;&#56;&#x38;&#x2e;&#49;&#51;&#48;</a></li>
 <li>​	使用ssh访问，如出现访问错误。可查看是否有改文件 ~&#x2F;.ssh&#x2F;known_ssh,尝试删除该文件解决问题</li>
 <li>​	退出：exit或logout</li>
 </ul>
@@ -956,6 +956,16 @@
 
 <h3 id="15-4使用restore完成恢复"><a href="#15-4使用restore完成恢复" class="headerlink" title="15.4	使用restore完成恢复"></a>15.4	使用restore完成恢复</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">1</span>.基本介绍：<br>restore 命令用来恢复已备份的文件，可以从 dump 生成的备份文件中恢复原文件<br><br><span class="hljs-number">2</span>.基本语法：<br>restore	[模式选项] [选项]<br><br>模式选项说明：不能混用，在一次命令中，只能指定一种。<br>	-C	使用对比模式，将备份的文件与已存在的文件相互对比，看看是否存在差异<br>	-i	使用交互模式，在进行还原操作时，restore 指令将依序询问用户<br>	-r	进行还原模式 （一般用这个）<br>	-t 	查看模式，看备份文件有哪些文件<br>	<br>选项<br>-f &lt;备份设备&gt; 	从指定的文件中读取备份数据，进行还原操作<br><br><span class="hljs-number">3</span>.案例：<br>案例 <span class="hljs-number">1</span>：restore 命令比较模式，比较备份文件和原文件的区别测试<br>mv <span class="hljs-regexp">/boot/</span>hello.java <span class="hljs-regexp">/boot/</span>hello100.java<br>restore -C -f boot.bak1.bz2	<span class="hljs-regexp">//</span>注意和 最新的文件比较<br><br>mv <span class="hljs-regexp">/boot/</span>hello100.java <span class="hljs-regexp">/boot/</span>hello.java <br>restore -C -f boot.bak1.bz2<br> <br>案例 <span class="hljs-number">2</span>：restore 命令查看模式，看备份文件有哪些数据/文件<br>restore -t -f boot.bak0.bz2<br><br><br>案例 <span class="hljs-number">3</span>：restore 命令还原模式<br>注意细节：如果你有增量备份，需要把增量备份文件也进行恢复，有几个增量备份文件，就要恢复几个，按顺序来恢复即可。<br>mkdir <span class="hljs-regexp">/opt/</span>boottmp <br>cd <span class="hljs-regexp">/opt/</span>boottmp<br>restore -r -f <span class="hljs-regexp">/opt/</span>boot.bak0.bz2 <span class="hljs-regexp">//</span>恢复到第 <span class="hljs-number">1</span> 次完全备份状态<br>restore -r -f <span class="hljs-regexp">/opt/</span>boot.bak1.bz2 <span class="hljs-regexp">//</span>恢复到第 <span class="hljs-number">2</span> 次增量备份状态<br><br><br>案例 <span class="hljs-number">4</span>：restore 命令恢复备份的文件，或者整个目录的文件<br>基本语法： restore -r -f 备份好的文件<br><br>[root@hspedu100 opt]<span class="hljs-comment"># mkdir etctmp </span><br>[root@hspedu100 opt]<span class="hljs-comment"># cd etctmp/</span><br>[root@hspedu100 etctmp]<span class="hljs-comment"># restore -r -f /opt/etc.bak0.bz2</span><br></code></pre></td></tr></table></figure>
 
+<h2 id="困扰我很久的ssh"><a href="#困扰我很久的ssh" class="headerlink" title="困扰我很久的ssh"></a>困扰我很久的ssh</h2><h3 id="SSH连接的工作原理"><a href="#SSH连接的工作原理" class="headerlink" title="SSH连接的工作原理"></a>SSH连接的工作原理</h3><p>当你建立SSH连接时，以下是发生的事情：</p>
+<ol>
+<li><strong>生成密钥对</strong>：你的计算机会生成一对公钥和私钥。</li>
+<li><strong>将公钥添加到远程服务器</strong>：你将你的公钥（<code>id_rsa.pub</code>文件的内容）添加到远程服务器的<code>~/.ssh/authorized_keys</code>文件中。这样，服务器就知道了你的公钥，可以用它加密发送给你的数据。</li>
+<li><strong>连接时的加密</strong>：当你尝试连接到服务器时，服务器会使用你的公钥加密一个随机生成的会话密钥，并将它发送给你。</li>
+<li><strong>使用私钥解密会话密钥</strong>：你的计算机使用你的私钥解密收到的会话密钥。</li>
+<li><strong>使用会话密钥进行加密通信</strong>：现在，你的计算机和服务器都有了相同的会话密钥，它们使用这个密钥进行加密和解密通信。</li>
+</ol>
+<p>这个过程保证了通信的保密性，因为只有你持有私钥，能够解密服务器发送的会话密钥，从而确保了只有你和服务器知道通信内容。</p>
+<p>通过使用非对称加密，SSH提供了一种非常安全的远程连接方式，保护了通信的隐私和数据的完整性。</p>
 
                 
               </div>
@@ -1020,7 +1030,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2023年9月2日</div>
+          <div>2023年10月10日</div>
         </div>
       
       
